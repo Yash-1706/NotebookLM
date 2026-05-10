@@ -26,12 +26,19 @@ Document Context:
 {CONTEXT}`;
 
 const FREE_MODELS = [
+  "openrouter/free",
   "meta-llama/llama-3.3-70b-instruct:free",
   "nousresearch/hermes-3-llama-3.1-405b:free",
+  "meta-llama/llama-3.1-8b-instruct:free",
   "meta-llama/llama-3.2-3b-instruct:free",
-  "nvidia/nemotron-3-nano-30b-a3b:free",
-  "qwen/qwen3-coder:free",
-  "google/gemma-4-31b-it:free",
+  "nvidia/llama-3.1-nemotron-70b-instruct:free",
+  "qwen/qwen-2.5-72b-instruct:free",
+  "qwen/qwen-2.5-coder-32b-instruct:free",
+  "google/gemini-2.0-flash-lite-preview-02-05:free",
+  "google/gemini-2.0-pro-exp:free",
+  "mistralai/mistral-nemo:free",
+  "deepseek/deepseek-r1-distill-llama-70b:free",
+  "deepseek/deepseek-chat:free",
 ];
 
 export async function ragQuery(query, vectorStore, collectionName, topK = 5) {

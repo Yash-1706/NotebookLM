@@ -6,6 +6,11 @@ const client = new OpenAI({
   baseURL: "https://openrouter.ai/api/v1",
 });
 
+const groqClient = new OpenAI({
+  apiKey: process.env.GROQ_API_KEY,
+  baseURL: "https://api.groq.com/openai/v1",
+});
+
 const SYSTEM_PROMPT = `You are NotebookLM — a document-grounded Q&A assistant. You answer questions using ONLY the provided document context. You never use your own training knowledge.
 
 STRICT RULES:
@@ -41,6 +46,14 @@ const FREE_MODELS = [
   "deepseek/deepseek-chat:free",
 ];
 
+const GROQ_MODELS = [
+  "llama-3.3-70b-versatile",
+  "llama3-70b-8192",
+  "llama3-8b-8192",
+  "mixtral-8x7b-32768",
+  "gemma2-9b-it"
+];
+
 export async function ragQuery(query, vectorStore, collectionName, topK = 5) {
   const queryEmbedding = await getEmbedding(query);
   const results = vectorStore.search(collectionName, queryEmbedding, topK);
@@ -70,25 +83,46 @@ export async function ragQuery(query, vectorStore, collectionName, topK = 5) {
       max_tokens: 2048,
     });
     if (!res?.choices?.[0]?.message?.content) throw new Error("Empty response");
-    console.log(`  Response from ${model}`);
+    console.log(`  Response from OpenRouter ${model}`);
+    return res;
+  };
+
+  const tryGroqModel = async (model) => {
+    const res = await groqClient.chat.completions.create({
+      model,
+      messages,
+      temperature: 0.3,
+      max_tokens: 2048,
+    });
+    if (!res?.choices?.[0]?.message?.content) throw new Error("Empty response");
+    console.log(`  Response from Groq ${model}`);
     return res;
   };
 
   const timeout = new Promise((_, reject) =>
-    setTimeout(() => reject(new Error("Request timed out. Free models may be busy, please try again.")), 30000)
+    setTimeout(() => reject(new Error("Request timed out.")), 30000)
   );
 
   let response;
   try {
+    console.log("Trying OpenRouter models...");
     response = await Promise.race([
       Promise.any(FREE_MODELS.map(tryModel)),
       timeout,
     ]);
   } catch (err) {
-    const msg = err instanceof AggregateError
-      ? "All free models are currently unavailable. Please try again in a minute."
-      : err.message;
-    throw new Error(msg);
+    console.log("OpenRouter models failed. Falling back to Groq models...");
+    try {
+      response = await Promise.race([
+        Promise.any(GROQ_MODELS.map(tryGroqModel)),
+        timeout,
+      ]);
+    } catch (groqErr) {
+      const msg = groqErr instanceof AggregateError
+        ? "All AI models (OpenRouter and Groq) are currently unavailable. Please try again in a minute."
+        : groqErr.message;
+      throw new Error(msg);
+    }
   }
 
   return {

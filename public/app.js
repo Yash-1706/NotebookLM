@@ -371,10 +371,10 @@ function showToast(message, type = "info") {
     animation: slideUp 0.3s var(--ease-out);
     box-shadow: 0 8px 32px rgba(0,0,0,0.3);
     max-width: 360px;
-    background: ${type === "error" ? "rgba(248, 113, 113, 0.2)" : "rgba(99, 102, 241, 0.2)"};
+    background: ${type === "error" ? "rgba(242, 158, 157, 0.2)" : type === "success" ? "rgba(0, 244, 210, 0.2)" : "rgba(117, 198, 250, 0.2)"};
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    border: 1px solid ${type === "error" ? "rgba(248, 113, 113, 0.4)" : "rgba(99, 102, 241, 0.4)"};
+    border: 1px solid ${type === "error" ? "rgba(242, 158, 157, 0.4)" : type === "success" ? "rgba(0, 244, 210, 0.4)" : "rgba(117, 198, 250, 0.4)"};
   `;
   toast.textContent = message;
   document.body.appendChild(toast);
@@ -382,7 +382,7 @@ function showToast(message, type = "info") {
   setTimeout(() => {
     toast.style.opacity = "0";
     toast.style.transform = "translateY(12px)";
-    toast.style.transition = "all 0.3s ease-out";
+    toast.style.transition = "all 0.3s var(--ease-out)";
     setTimeout(() => toast.remove(), 300);
   }, 3500);
 }

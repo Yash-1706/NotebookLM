@@ -12,6 +12,8 @@ import { getEmbeddings, warmupEmbeddings, isModelReady } from "./src/embeddings.
 import { VectorStore } from "./src/vectorStore.js";
 import { ragQuery } from "./src/rag.js";
 
+import os from "os";
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
@@ -20,7 +22,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(join(__dirname, "public")));
 
-const uploadsDir = join(__dirname, "uploads");
+const uploadsDir = join(os.tmpdir(), "notebooklm-uploads");
 if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir, { recursive: true });
 
 const upload = multer({ dest: uploadsDir, limits: { fileSize: 20 * 1024 * 1024 } });
@@ -146,10 +148,14 @@ app.delete("/api/documents/:id", (req, res) => {
 
 const PORT = process.env.PORT || 3000;
 
-warmupEmbeddings()
-  .then(() => {
-    app.listen(PORT, () => console.log(`Server running at http://localhost:${PORT}`));
-  })
-  .catch(() => {
-    app.listen(PORT, () => console.log(`Server running at http://localhost:${PORT}`));
-  });
+if (process.env.NODE_ENV !== "production") {
+  warmupEmbeddings()
+    .then(() => {
+      app.listen(PORT, () => console.log(`Server running at http://localhost:${PORT}`));
+    })
+    .catch(() => {
+      app.listen(PORT, () => console.log(`Server running at http://localhost:${PORT}`));
+    });
+}
+
+export default app;

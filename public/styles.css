@@ -12,32 +12,32 @@
 }
 
 :root {
-  /* Minimalist Monochrome Palette */
-  --bg-primary: #000000;
-  --bg-secondary: #0a0a0a;
-  --bg-surface: #111111;
-  --bg-elevated: #1a1a1a;
-  --bg-hover: #222222;
-  --bg-active: #333333;
+  /* Minimalist Monochrome Palette (Light Theme) */
+  --bg-primary: #ffffff;
+  --bg-secondary: #fafafa;
+  --bg-surface: #f4f4f5;
+  --bg-elevated: #efeff1;
+  --bg-hover: #e4e4e7;
+  --bg-active: #d4d4d8;
 
-  --border-subtle: #222222;
-  --border-default: #333333;
-  --border-strong: #555555;
+  --border-subtle: #f4f4f5;
+  --border-default: #e4e4e7;
+  --border-strong: #d4d4d8;
 
-  --text-primary: #ffffff;
-  --text-secondary: #a0a0a0;
-  --text-muted: #666666;
+  --text-primary: #09090b;
+  --text-secondary: #52525b;
+  --text-muted: #a1a1aa;
 
-  /* Accent — Pure White for minimalism */
-  --accent-start: #ffffff;
-  --accent-end: #ffffff;
-  --accent-solid: #ffffff;
-  --accent-dim: rgba(255, 255, 255, 0.05);
+  /* Accent — Pure Black for minimalism in light mode */
+  --accent-start: #000000;
+  --accent-end: #000000;
+  --accent-solid: #000000;
+  --accent-dim: rgba(0, 0, 0, 0.05);
   --accent-glow: transparent;
 
-  --success: #ffffff;
-  --warning: #aaaaaa;
-  --error: #ff5555;
+  --success: #000000;
+  --warning: #555555;
+  --error: #ef4444;
 
   /* Spacing */
   --sidebar-width: 320px;
@@ -442,6 +442,7 @@ body {
   overflow-x: auto;
   margin: 16px 0;
   border-radius: 4px;
+  border: 1px solid var(--border-subtle);
 }
 
 /* Sources panel */
@@ -537,6 +538,8 @@ body {
 
 .input-wrapper:focus-within {
   border-color: var(--border-strong);
+  background: var(--bg-primary);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
 #queryInput {
@@ -588,7 +591,7 @@ body {
 .processing-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.9);
+  background: rgba(255, 255, 255, 0.9);
   display: none;
   align-items: center;
   justify-content: center;

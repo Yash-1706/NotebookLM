@@ -362,23 +362,15 @@ function showToast(message, type = "info") {
     bottom: 24px;
     right: 24px;
     padding: 14px 20px;
-    border-radius: 12px;
+    border-radius: 4px;
     font-size: 0.85rem;
     font-family: var(--font-sans);
-    color: white;
+    color: #ffffff;
     z-index: 200;
     animation: fadeInUp 0.3s ease-out;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
     max-width: 360px;
-    backdrop-filter: blur(12px);
-    border: 1px solid rgba(255,255,255,0.1);
-    background: ${
-      type === "success"
-        ? "rgba(52, 211, 153, 0.9)"
-        : type === "error"
-          ? "rgba(248, 113, 113, 0.9)"
-          : "rgba(129, 140, 248, 0.9)"
-    };
+    background: ${type === "error" ? "#ef4444" : "#09090b"};
   `;
   toast.textContent = message;
   document.body.appendChild(toast);

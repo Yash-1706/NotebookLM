@@ -281,6 +281,7 @@ function addMessage(role, content, sources = null) {
   }
 
   msg.innerHTML = `
+    <div class="message-avatar">${avatar}</div>
     <div class="message-body">
       <div class="message-sender">${sender}</div>
       <div class="message-content">${formatMarkdown(content)}</div>
@@ -298,11 +299,10 @@ function addLoadingMessage() {
   msg.className = "message assistant";
   msg.id = id;
   msg.innerHTML = `
+    <div class="message-avatar">🤖</div>
     <div class="message-body">
       <div class="message-sender">NotebookLM</div>
-      <div class="message-content">
-        <div class="loading-indicator">Thinking...</div>
-      </div>
+      <div class="loading-indicator">Thinking...</div>
     </div>
   `;
   messages.appendChild(msg);
@@ -361,16 +361,20 @@ function showToast(message, type = "info") {
     position: fixed;
     bottom: 24px;
     right: 24px;
-    padding: 14px 20px;
-    border-radius: 4px;
-    font-size: 0.85rem;
+    padding: 14px 24px;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    font-weight: 500;
     font-family: var(--font-sans);
     color: #ffffff;
     z-index: 200;
-    animation: fadeInUp 0.3s ease-out;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+    animation: slideUp 0.3s var(--ease-out);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
     max-width: 360px;
-    background: ${type === "error" ? "#ef4444" : "#09090b"};
+    background: ${type === "error" ? "rgba(248, 113, 113, 0.2)" : "rgba(99, 102, 241, 0.2)"};
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid ${type === "error" ? "rgba(248, 113, 113, 0.4)" : "rgba(99, 102, 241, 0.4)"};
   `;
   toast.textContent = message;
   document.body.appendChild(toast);

@@ -85,7 +85,7 @@ app.post("/api/upload", upload.array("files"), async (req, res) => {
         content: chunk.content,
         metadata: chunk.metadata,
       }));
-      vectorStore.addDocuments(docId, vectorDocs);
+      await vectorStore.addDocuments(docId, vectorDocs);
       console.log(`  Stored in vector database`);
 
       const docMeta = {
@@ -138,12 +138,17 @@ app.get("/api/documents", (req, res) => {
   res.json(Array.from(documents.values()));
 });
 
-app.delete("/api/documents/:id", (req, res) => {
-  const { id } = req.params;
-  if (!documents.has(id)) return res.status(404).json({ error: "Document not found" });
-  vectorStore.deleteCollection(id);
-  documents.delete(id);
-  res.json({ success: true });
+app.delete("/api/documents/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    if (!documents.has(id)) return res.status(404).json({ error: "Document not found" });
+    await vectorStore.deleteCollection(id);
+    documents.delete(id);
+    res.json({ success: true });
+  } catch (err) {
+    console.error("Delete error:", err.message);
+    res.status(500).json({ error: "Failed to delete document: " + err.message });
+  }
 });
 
 const PORT = process.env.PORT || 3000;

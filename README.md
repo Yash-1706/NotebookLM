@@ -13,7 +13,7 @@ A full-stack RAG (Retrieval-Augmented Generation) application inspired by Google
 - **Upload PDF or TXT** — drag & drop or click to browse
 - **Automatic chunking** — Recursive Character Text Splitter with configurable overlap
 - **Semantic embeddings** — local `all-MiniLM-L6-v2` model (no API key needed for embeddings)
-- **Vector database** — in-memory vector store with cosine similarity search
+- **Vector database** — Qdrant (cloud) or in-memory fallback with cosine similarity search
 - **Grounded answers** — LLM generates responses strictly from document context
 - **Source citations** — every answer shows the source chunks and page numbers
 - **Beautiful dark UI** — glassmorphism design with smooth animations
@@ -26,7 +26,7 @@ A full-stack RAG (Retrieval-Augmented Generation) application inspired by Google
 ```
 ┌─────────────┐    ┌──────────────┐    ┌──────────────────┐    ┌──────────────┐
 │   Upload     │ →  │   Chunking   │ →  │   Embedding      │ →  │ Vector Store │
-│   (PDF/TXT)  │    │   Recursive  │    │   MiniLM-L6-v2   │    │   (In-Memory)│
+│   (PDF/TXT)  │    │   Recursive  │    │   MiniLM-L6-v2   │    │  (Qdrant/Mem)│
 └─────────────┘    │   Splitter   │    │   384 dimensions  │    │   Cosine Sim │
                    └──────────────┘    └──────────────────┘    └──────┬───────┘
                                                                       │
@@ -88,6 +88,13 @@ OPENROUTER_API_KEY=your_openrouter_api_key_here
 PORT=3000
 ```
 
+Optional Qdrant (recommended for persistent storage):
+
+```env
+QDRANT_URL=https://your-cluster-url:6333
+QDRANT_API_KEY=your_qdrant_api_key_here
+```
+
 ### Run
 
 ```bash
@@ -107,7 +114,7 @@ Open **http://localhost:3000** in your browser.
 ├── src/
 │   ├── chunker.js         # Recursive text splitter (chunking strategy)
 │   ├── embeddings.js      # Local embedding model (all-MiniLM-L6-v2)
-│   ├── vectorStore.js     # In-memory vector database with cosine similarity
+│   ├── vectorStore.js     # Qdrant vector database with in-memory fallback
 │   └── rag.js             # RAG pipeline: retrieval + generation
 ├── public/
 │   ├── index.html         # Web UI
@@ -138,7 +145,7 @@ Open **http://localhost:3000** in your browser.
 | Backend | Node.js + Express |
 | Frontend | Vanilla HTML/CSS/JS |
 | Embeddings | `@xenova/transformers` (all-MiniLM-L6-v2) |
-| Vector DB | Custom in-memory store with cosine similarity |
+| Vector DB | Qdrant (cloud) with in-memory fallback |
 | LLM | OpenRouter API (GPT-4.1-mini) |
 | PDF Parsing | `pdf-parse` |
 

@@ -56,7 +56,7 @@ const GROQ_MODELS = [
 
 export async function ragQuery(query, vectorStore, collectionName, topK = 5) {
   const queryEmbedding = await getEmbedding(query);
-  const results = vectorStore.search(collectionName, queryEmbedding, topK);
+  const results = await vectorStore.search(collectionName, queryEmbedding, topK);
 
   if (results.length === 0) {
     return {
@@ -99,28 +99,28 @@ export async function ragQuery(query, vectorStore, collectionName, topK = 5) {
     return res;
   };
 
-  const timeout = new Promise((_, reject) =>
-    setTimeout(() => reject(new Error("Request timed out.")), 30000)
+  const createTimeout = (ms) => new Promise((_, reject) =>
+    setTimeout(() => reject(new Error("Request timed out.")), ms)
   );
 
   let response;
   try {
-    console.log("Trying OpenRouter models...");
+    console.log("Trying Groq models...");
     response = await Promise.race([
-      Promise.any(FREE_MODELS.map(tryModel)),
-      timeout,
+      Promise.any(GROQ_MODELS.map(tryGroqModel)),
+      createTimeout(30000),
     ]);
   } catch (err) {
-    console.log("OpenRouter models failed. Falling back to Groq models...");
+    console.log("Groq models failed. Falling back to OpenRouter models...");
     try {
       response = await Promise.race([
-        Promise.any(GROQ_MODELS.map(tryGroqModel)),
-        timeout,
+        Promise.any(FREE_MODELS.map(tryModel)),
+        createTimeout(30000),
       ]);
-    } catch (groqErr) {
-      const msg = groqErr instanceof AggregateError
-        ? "All AI models (OpenRouter and Groq) are currently unavailable. Please try again in a minute."
-        : groqErr.message;
+    } catch (openRouterErr) {
+      const msg = openRouterErr instanceof AggregateError
+        ? "All AI models (Groq and OpenRouter) are currently unavailable. Please try again in a minute."
+        : openRouterErr.message;
       throw new Error(msg);
     }
   }

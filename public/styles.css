@@ -1,4 +1,4 @@
-/* ═══════════════════════════════════════════════════════════════════════════
+    /* ═══════════════════════════════════════════════════════════════════════════
    NotebookLM RAG — Premium Glassmorphic Design System
    ═══════════════════════════════════════════════════════════════════════════ */
 
@@ -94,7 +94,7 @@ body {
   flex-direction: column;
   transition: transform 0.3s var(--ease-out);
   z-index: 20;
-  box-shadow: 4px 0 24px rgba(0, 0, 0, 0.2);
+  box-shadow: 4px 0 24px rgba(0, 0, 0, 0.05);
 }
 
 .sidebar-header {
@@ -124,7 +124,7 @@ body {
   font-weight: 700;
   color: var(--text-primary);
   letter-spacing: -0.03em;
-  background: linear-gradient(to right, #fff, #a0a0b0);
+  background: linear-gradient(to right, var(--text-primary), var(--text-secondary));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -434,7 +434,7 @@ body {
   color: var(--text-primary);
   margin-bottom: 16px;
   letter-spacing: -0.04em;
-  background: linear-gradient(135deg, #fff 30%, var(--accent-end));
+  background: linear-gradient(135deg, var(--text-primary) 30%, var(--accent-end));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -462,7 +462,7 @@ body {
   flex: 1;
   text-align: center;
   transition: all 0.3s var(--ease-spring);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
 }
 
 .feature-card:hover {
@@ -537,7 +537,8 @@ body {
 
 .message.user .message-content {
   font-size: 1.15rem;
-  font-weight: 300;
+  font-weight: 400;
+  color: var(--text-primary);
 }
 
 /* Markdown inside messages */
@@ -701,7 +702,7 @@ body {
   border: 1px solid var(--border-default);
   padding: 16px 20px;
   border-radius: 16px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
   transition: all 0.3s var(--ease-out);
 }
 
@@ -791,7 +792,7 @@ body {
   padding: 40px;
   border-radius: 20px;
   border: 1px solid var(--border-default);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
 }
 
 .processing-title {
